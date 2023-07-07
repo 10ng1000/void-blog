@@ -305,14 +305,32 @@
     </div>
     <% int i =1;    %>
     <c:forEach items="${comments}" var="comment">
-
-
+        <c:if test="${comment.parentId== NULL}">
         <article class="comment">
                 <section style="text-align:left">
-                <%= i++  %>楼&nbsp;&nbsp;${comment.name}&nbsp;&nbsp;${comment.date}<br/><br/>
+                <%= i++  %>楼&nbsp;&nbsp;${comment.name}&nbsp;&nbsp;${comment.date}<button id="subCommentButton" class="btn btn-default" type="button"
+                                                                                           style="float: right"
+                                                                                           username = "${comment.name}" parentId = "${comment.id}"
+                >回复</button><br/><br/>
                 <p>${comment.content}</p><br/>
                 </section>
+            <c:forEach items="${comments}" var = "subComment">
+                <c:if test="${subComment.parentId == comment.id}">
+                    <article class = "comment">
+                        <section style="text-align: left">
+                                ${subComment.name}&nbsp;&nbsp;${subComment.date}
+                                    <button id="subCommentButton2" class="btn btn-default" type="button"
+                                            style="float: right"
+                                            username = "${subComment.name}" parentId = "${subComment.id}"
+                                    >回复</button>
+                                    <br/><br/>
+                            <p>${subComment.content}</p><br/>
+                        </section>
+                    </article>
+                </c:if>
+            </c:forEach>
             </article>
+    </c:if>
     </c:forEach>
     		<div class="form-horizontal" role="form" style="margin:10px">
     			<div class="form-group">
@@ -340,12 +358,26 @@
      <br/>
         <p style="text-align: right;color: red;position: absolute" id="info"></p>
         <br/>
-     <button id="commentButton" class="btn btn-default" type="submit">发送</button>
+     <button id="commentButton" class="btn btn-default" type="submit">提交</button>
                                                 </div>
 
     			</div>
     			 <script>
-
+                     let parentId = new String(100);
+                        $("#subCommentButton").click(function (){
+                                $("#content").focus();
+                                let val="@"+$(this).attr("username")+"\n";
+                                parentId = $(this).attr("parentId");
+                                $('#content').val(val);
+                            }
+                        )
+                     $("#subCommentButton2").click(function (){
+                             $("#content").focus();
+                             let val="@"+$(this).attr("username")+"\n";
+                             parentId = $(this).attr("parentId");
+                             $('#content').val(val);
+                         }
+                     )
                         $("#commentButton").click(function () {
                             if($("#content").val()==''&&$("#name").val()==''&&$("#email").val()==''){
                                 $("#info").text("提示:请输入评论内容,昵称和邮箱");
@@ -359,8 +391,31 @@
                             else if($("#email").val()==''){
                                 $("#info").text("提示:请输入邮箱");
                             }
+                            else if($("#content").val().split("\n")[0].charAt(0)=='@'){
+                                $("#info").text("回复评论中");
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/api/comment/add",
+                                    data: {
+                                        content: $("#content").val() ,
+                                        name: $("#name").val(),
+                                        email: $("#email").val(),
+                                        parentId:parentId,
+                                        articleId:$("#articleId").val(),
+                                    },
+                                    dataType: "json",
+                                    success: function(data) {
+                                        if(data.stateCode.trim() == "1") {
+                                            $("#info").text("评论成功,跳转中...");
+                                            window.location.reload();
+                                        } else  {
+                                            $("#info").text("评论失败...");
+                                        }
+                                    }
+                                });
+                            }
                             else {
-                             $("#info").text("");
+                             $("#info").text("回复页面中");
                                 $.ajax({
                                     type: "POST",
                                     url: "/api/comment/add",
