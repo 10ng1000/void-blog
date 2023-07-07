@@ -16,7 +16,7 @@ public class Comment {
 
     private String content;
 
-    private Comment parent;
+    private Long parentId;
 
     public Long getId() {
         return id;
@@ -38,7 +38,6 @@ public class Comment {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//设置日期格式
         String dates = df.format(date);
         return dates;
-
     }
 
     public void setDate(Date date) {
@@ -67,5 +66,13 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }
