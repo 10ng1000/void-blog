@@ -7,12 +7,13 @@
     <result column="date" property="date" jdbcType="TIMESTAMP" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.voidblog.domain.Comment" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, article_id, date, name, email
+    id, article_id, date, name, email, parent_id
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -43,55 +44,12 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.voidblog.domain.Comment" >
-    insert into comment (id, article_id, date, 
-      name, email, content
-      )
+    insert into comment ( <include refid="Base_Column_List"/>,
+    <include refid="Blob_Column_List" />
+                         )
     values (#{id,jdbcType=BIGINT}, #{articleId,jdbcType=BIGINT}, #{date,jdbcType=TIMESTAMP}, 
-      #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR}
       )
-  </insert>
-  <insert id="insertSelective" parameterType="com.voidblog.domain.Comment" >
-    insert into comment
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="articleId != null" >
-        article_id,
-      </if>
-      <if test="date != null" >
-        date,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="email != null" >
-        email,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="articleId != null" >
-        #{articleId,jdbcType=BIGINT},
-      </if>
-      <if test="date != null" >
-        #{date,jdbcType=TIMESTAMP},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.voidblog.domain.Comment" >
     update comment
