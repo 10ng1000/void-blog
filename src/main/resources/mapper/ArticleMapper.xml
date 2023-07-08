@@ -23,7 +23,7 @@
   <sql id="Blob_Column_List" >
     content
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     *
     from article_catalog
@@ -44,16 +44,14 @@
     where id &gt; #{id,jdbcType=INTEGER} ORDER BY id ASC limit 1;
   </select>
 
-
-
-  <select id="selectByWord" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByWord" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select
     *
     from article_catalog
     where title LIKE CONCAT(CONCAT('%', #{word}), '%') OR content  LIKE CONCAT(CONCAT('%', #{word}), '%')
   </select>
 
-  <select id="queryAll" resultMap="BaseResultMap"  >
+  <select id="queryAll" resultMap="ResultMapWithBLOBs"  >
     select *
     from article_catalog
     ORDER BY id DESC

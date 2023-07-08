@@ -21,6 +21,34 @@ public class CatalogController {
     @Autowired
     ArticleServiceImpl articleService;
 
+    @PostMapping("/admin/catalog/add")
+    public String catalogAdd(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Catalog catalog = new Catalog();
+        String id = request.getParameter("id");
+        if (id != null) catalog.setId(Integer.parseInt(id));
+        catalog.setName(request.getParameter("name"));
+        try{
+            catalogService.insert(catalog);
+            redirectAttributes.addFlashAttribute("success","新建类别成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "新建类别失败");
+        }
+        return "redirect:/admin/catalog/list";
+    }
+    @PostMapping("/admin/catalog/delete")
+    public String catalogDelete(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        String id = request.getParameter("id");
+        try{
+            if (id != null) catalogService.deleteById(Integer.parseInt(id));
+            redirectAttributes.addFlashAttribute("success","删除类别成功");
+        }catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "删除类别失败");
+        }
+        return "redirect:/admin/catalog/list";
+    }
+
     @GetMapping("/catalog")
     public ModelAndView CatalogList(){
         List<Catalog> catalogs=catalogService.queryAll();
