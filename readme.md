@@ -109,7 +109,8 @@ http://localhost:8080/admin
 
 ### 项目进度
 
-![](C:\Users\23629\AppData\Roaming\marktext\images\2023-07-12-12-36-23-VoidBlog进度甘特图.png)
+![VoidBlog进度甘特图](https://github.com/10ng1000/void-blog/assets/95556180/27fde6cd-1148-4bae-aed4-7d81eea89f69)
+
 
 ### 详细文档
 
