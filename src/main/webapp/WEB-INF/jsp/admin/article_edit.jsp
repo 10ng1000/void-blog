@@ -50,14 +50,12 @@
             <label for="desci">简介</label>
             <textarea class="form-control" id="desci" rows="3" name="desci" placeholder="简介">${article.desci}</textarea>
         </div>
-        <div id="cont" style="display: none">
-            ${article.content}
-        </div>
         <div class="form-group">
-            <label for="editor">内容</label>
-            <script id="editor" type="text/plain"  name="content" style="width:1024px;height:500px;" >
-            </script>
+            <label for="div1">内容</label>
+            <div id="div1">
             </div>
+            <textarea class="form-control" id="content" rows="3" name="content" placeholder="">${article.content}</textarea>
+        </div>
             <input type="submit" />
                 </form>
 
