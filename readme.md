@@ -7,7 +7,7 @@
 ```
 $ git clone https://github.com/10ng1000/void-blog
 
-$ cd Blog-System
+$ cd void-blog
 
 $ mvn clean compile
 
